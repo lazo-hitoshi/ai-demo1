@@ -13,9 +13,6 @@
     --surface2: #181c24;
     --border: #1e2430;
     --accent: #4af0b0;
-    --accent2: #2d9cdb;
-    --accent3: #f5a623;
-    --danger: #ff4d6d;
     --text: #e8eaf0;
     --text-muted: #5a6070;
     --text-dim: #8892a0;
@@ -30,10 +27,8 @@
     font-family: 'Noto Sans JP', sans-serif;
     font-weight: 300;
     min-height: 100vh;
-    overflow-x: hidden;
   }
 
-  /* Grid background */
   body::before {
     content: '';
     position: fixed;
@@ -55,11 +50,7 @@
     padding: 40px 24px 80px;
   }
 
-  /* Header */
-  .header {
-    text-align: center;
-    margin-bottom: 48px;
-  }
+  .header { text-align: center; margin-bottom: 48px; }
 
   .header-badge {
     display: inline-flex;
@@ -98,9 +89,7 @@
     margin-bottom: 12px;
   }
 
-  h1 span {
-    color: var(--accent);
-  }
+  h1 span { color: var(--accent); }
 
   .header-sub {
     color: var(--text-dim);
@@ -108,11 +97,9 @@
     line-height: 1.6;
   }
 
-  /* Flow indicator */
   .flow-bar {
     display: flex;
     align-items: center;
-    gap: 0;
     margin-bottom: 36px;
     overflow-x: auto;
     padding-bottom: 4px;
@@ -163,7 +150,6 @@
     border-color: var(--accent);
     background: rgba(74, 240, 176, 0.1);
     color: var(--accent);
-    box-shadow: 0 0 12px var(--glow);
     animation: dotPulse 1.5s ease-in-out infinite;
   }
 
@@ -185,15 +171,11 @@
     text-align: center;
     white-space: nowrap;
     transition: color 0.3s;
-    font-weight: 400;
   }
 
   .flow-step.active .flow-label,
-  .flow-step.done .flow-label {
-    color: var(--accent);
-  }
+  .flow-step.done .flow-label { color: var(--accent); }
 
-  /* Input Panel */
   .panel {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -233,25 +215,10 @@
     flex-shrink: 0;
   }
 
-  .panel-title {
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-  }
+  .panel-title { font-size: 15px; font-weight: 700; letter-spacing: 0.02em; }
+  .panel-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
-  .panel-subtitle {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
-
-  /* Form */
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .form-grid .span-2 { grid-column: span 2; }
 
   label {
@@ -285,10 +252,8 @@
   }
 
   textarea { min-height: 80px; }
-
   select option { background: var(--surface2); }
 
-  /* Button */
   .btn-run {
     width: 100%;
     padding: 14px 24px;
@@ -306,7 +271,6 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    letter-spacing: 0.02em;
   }
 
   .btn-run:hover:not(:disabled) {
@@ -315,11 +279,7 @@
     box-shadow: 0 8px 24px rgba(74, 240, 176, 0.25);
   }
 
-  .btn-run:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
+  .btn-run:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .btn-reset {
     width: 100%;
@@ -335,12 +295,8 @@
     margin-top: 10px;
   }
 
-  .btn-reset:hover {
-    border-color: var(--text-muted);
-    color: var(--text);
-  }
+  .btn-reset:hover { border-color: var(--text-muted); color: var(--text); }
 
-  /* AI Result Cards */
   .result-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -352,10 +308,7 @@
     transition: opacity 0.4s, transform 0.4s;
   }
 
-  .result-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .result-card.visible { opacity: 1; transform: translateY(0); }
 
   .result-header {
     display: flex;
@@ -366,11 +319,7 @@
     background: var(--surface2);
   }
 
-  .result-header-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .result-header-left { display: flex; align-items: center; gap: 10px; }
 
   .ai-badge {
     display: inline-flex;
@@ -418,7 +367,6 @@
     min-height: 60px;
   }
 
-  /* Typing cursor */
   .typing::after {
     content: '▋';
     animation: blink 0.7s step-end infinite;
@@ -430,7 +378,6 @@
     50% { opacity: 0; }
   }
 
-  /* Processing animation */
   .processing-dots {
     display: inline-flex;
     gap: 4px;
@@ -455,7 +402,6 @@
     40% { transform: scale(1); opacity: 1; }
   }
 
-  /* CEO approval panel */
   .ceo-panel {
     background: linear-gradient(135deg, rgba(255, 107, 157, 0.06), rgba(74, 240, 176, 0.04));
     border: 1px solid rgba(255, 107, 157, 0.25);
@@ -471,9 +417,6 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
   }
 
   .approve-btns {
@@ -494,28 +437,11 @@
     transition: all 0.2s;
   }
 
-  .btn-approve.go {
-    background: var(--accent);
-    color: var(--bg);
-  }
+  .btn-approve.go { background: var(--accent); color: var(--bg); }
+  .btn-approve.go:hover { background: #6fffc4; box-shadow: 0 4px 16px rgba(74, 240, 176, 0.3); }
+  .btn-approve.back { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+  .btn-approve.back:hover { border-color: var(--text-muted); color: var(--text); }
 
-  .btn-approve.go:hover {
-    background: #6fffc4;
-    box-shadow: 0 4px 16px rgba(74, 240, 176, 0.3);
-  }
-
-  .btn-approve.back {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-  }
-
-  .btn-approve.back:hover {
-    border-color: var(--text-muted);
-    color: var(--text);
-  }
-
-  /* Final result */
   .final-result {
     background: linear-gradient(135deg, rgba(74, 240, 176, 0.05), rgba(45, 156, 219, 0.05));
     border: 1px solid rgba(74, 240, 176, 0.3);
@@ -527,30 +453,14 @@
     transition: all 0.5s;
   }
 
-  .final-result.visible {
-    opacity: 1;
-    transform: scale(1);
-  }
+  .final-result.visible { opacity: 1; transform: scale(1); }
+  .final-result h2 { font-size: 20px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+  .final-result p { color: var(--text-dim); font-size: 13px; line-height: 1.6; }
 
-  .final-result h2 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 8px;
-  }
-
-  .final-result p {
-    color: var(--text-dim);
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  /* Scrollbar */
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-  /* Responsive */
   @media (max-width: 600px) {
     .form-grid { grid-template-columns: 1fr; }
     .form-grid .span-2 { grid-column: span 1; }
@@ -562,42 +472,21 @@
 <body>
 <div class="container">
 
-  <!-- Header -->
   <div class="header">
     <div class="header-badge">AI EXECUTIVE DEMO</div>
     <h1>1人社長 × <span>AI執行部</span><br>案件フロー実演</h1>
     <p class="header-sub">案件情報を入力すると、AIが営業・提案・財務・品質を分担して<br>社長の意思決定材料を自動で揃えます</p>
   </div>
 
-  <!-- Flow bar -->
   <div class="flow-bar">
-    <div class="flow-step" id="step-0">
-      <div class="flow-dot">入力</div>
-      <div class="flow-label">案件入力</div>
-    </div>
-    <div class="flow-step" id="step-1">
-      <div class="flow-dot">営</div>
-      <div class="flow-label">営業AI</div>
-    </div>
-    <div class="flow-step" id="step-2">
-      <div class="flow-dot">提</div>
-      <div class="flow-label">提案AI</div>
-    </div>
-    <div class="flow-step" id="step-3">
-      <div class="flow-dot">財</div>
-      <div class="flow-label">財務AI</div>
-    </div>
-    <div class="flow-step" id="step-4">
-      <div class="flow-dot">品</div>
-      <div class="flow-label">品質AI</div>
-    </div>
-    <div class="flow-step" id="step-5">
-      <div class="flow-dot">社</div>
-      <div class="flow-label">社長承認</div>
-    </div>
+    <div class="flow-step" id="step-0"><div class="flow-dot">入力</div><div class="flow-label">案件入力</div></div>
+    <div class="flow-step" id="step-1"><div class="flow-dot">営</div><div class="flow-label">営業AI</div></div>
+    <div class="flow-step" id="step-2"><div class="flow-dot">提</div><div class="flow-label">提案AI</div></div>
+    <div class="flow-step" id="step-3"><div class="flow-dot">財</div><div class="flow-label">財務AI</div></div>
+    <div class="flow-step" id="step-4"><div class="flow-dot">品</div><div class="flow-label">品質AI</div></div>
+    <div class="flow-step" id="step-5"><div class="flow-dot">社</div><div class="flow-label">社長承認</div></div>
   </div>
 
-  <!-- Input Panel -->
   <div class="panel active-panel" id="input-panel">
     <div class="panel-header">
       <div class="panel-icon">📋</div>
@@ -658,340 +547,194 @@
     </button>
   </div>
 
-  <!-- Results area -->
   <div id="results-area"></div>
 
 </div>
 
 <script>
-const API_URL = "https://api.anthropic.com/v1/messages";
+  let isRunning = false;
 
-let isRunning = false;
-
-function setStep(n, state) {
-  // state: 'active' | 'done' | ''
-  const el = document.getElementById(`step-${n}`);
-  if (!el) return;
-  el.className = `flow-step ${state}`;
-  if (state === 'done') {
-    el.querySelector('.flow-dot').textContent = '✓';
+  function setStep(n, state) {
+    const el = document.getElementById(`step-${n}`);
+    if (!el) return;
+    el.className = `flow-step ${state}`;
+    if (state === 'done') el.querySelector('.flow-dot').textContent = '✓';
   }
-}
 
-function addCard(id, icon, label, badgeClass, defaultText = '') {
-  const area = document.getElementById('results-area');
-  const card = document.createElement('div');
-  card.className = 'result-card';
-  card.id = id;
-  card.innerHTML = `
-    <div class="result-header">
-      <div class="result-header-left">
-        <span style="font-size:18px">${icon}</span>
-        <span class="ai-badge ${badgeClass}">${label}</span>
+  function addCard(id, icon, label, badgeClass, loadingMsg) {
+    const area = document.getElementById('results-area');
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    card.id = id;
+    card.innerHTML = `
+      <div class="result-header">
+        <div class="result-header-left">
+          <span style="font-size:18px">${icon}</span>
+          <span class="ai-badge ${badgeClass}">${label}</span>
+        </div>
+        <span class="status-chip processing" id="${id}-status">処理中</span>
       </div>
-      <span class="status-chip processing" id="${id}-status">処理中</span>
-    </div>
-    <div class="result-body" id="${id}-body">
-      <div class="processing-dots">
-        <span></span><span></span><span></span>
-        <span style="margin-left:8px;font-family:'Noto Sans JP';font-size:13px;color:var(--text-muted)">${defaultText || '分析中...'}</span>
-      </div>
-    </div>
-  `;
-  area.appendChild(card);
-  setTimeout(() => card.classList.add('visible'), 50);
-  return card;
-}
+      <div class="result-body" id="${id}-body">
+        <div class="processing-dots">
+          <span></span><span></span><span></span>
+          <span style="margin-left:8px;font-family:'Noto Sans JP';font-size:13px;color:var(--text-muted)">${loadingMsg}</span>
+        </div>
+      </div>`;
+    area.appendChild(card);
+    setTimeout(() => card.classList.add('visible'), 50);
+  }
 
-function setCardResult(id, text) {
-  const body = document.getElementById(`${id}-body`);
-  const status = document.getElementById(`${id}-status`);
-  body.innerHTML = '';
-  body.classList.add('typing');
-  status.textContent = '完了';
-  status.className = 'status-chip done';
+  function setCardResult(id, text) {
+    const body = document.getElementById(`${id}-body`);
+    const status = document.getElementById(`${id}-status`);
+    body.innerHTML = '';
+    body.classList.add('typing');
+    status.textContent = '完了';
+    status.className = 'status-chip done';
+    let i = 0;
+    function typeChar() {
+      if (i < text.length) { body.textContent += text[i++]; setTimeout(typeChar, 8); }
+      else body.classList.remove('typing');
+    }
+    typeChar();
+  }
 
-  let i = 0;
-  const speed = 8;
-  function typeChar() {
-    if (i < text.length) {
-      body.textContent += text[i];
-      i++;
-      setTimeout(typeChar, speed);
+  async function callAI(systemPrompt, userMessage) {
+    const res = await fetch('https://ai-demo1-eta.vercel.app/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ systemPrompt, userMessage })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data.text;
+  }
+
+  async function startFlow() {
+    if (isRunning) return;
+    const company = document.getElementById('company').value.trim();
+    const industry = document.getElementById('industry').value;
+    const issue = document.getElementById('issue').value.trim();
+    const budget = document.getElementById('budget').value;
+    const timeline = document.getElementById('timeline').value;
+
+    if (!company || !issue) { alert('顧客企業名と相談内容を入力してください'); return; }
+
+    isRunning = true;
+    document.getElementById('start-btn').disabled = true;
+    document.getElementById('results-area').innerHTML = '';
+
+    const caseInfo = `企業名：${company}\n業種：${industry||'不明'}\n相談内容：${issue}\n予算感：${budget||'未定'}\n納期：${timeline||'未定'}`;
+
+    setStep(0, 'done'); setStep(1, 'active');
+    addCard('sales-card', '📊', '営業AI', 'sales', '顧客課題を分析中...');
+
+    let salesResult = '';
+    try {
+      salesResult = await callAI(
+        `あなたは法人営業の専門家AIです。案件情報を受け取り、以下を簡潔に整理してください。出力は日本語、箇条書きで簡潔に。\n\n【出力フォーマット】\n■ 顧客の課題仮説（2〜3点）\n■ 提案の切り口（2案）\n■ 初回面談で確認すべき質問（3つ）\n■ 初回接触メール 件名と本文（100字以内）\n\n余分な説明は不要。フォーマット通りに出力。`,
+        `案件情報：\n${caseInfo}`
+      );
+    } catch(e) { salesResult = `[エラー] ${e.message}`; }
+
+    setCardResult('sales-card', salesResult);
+    setStep(1, 'done'); await sleep(600); setStep(2, 'active');
+    addCard('proposal-card', '📝', '提案AI', 'proposal', '提案骨子を構築中...');
+
+    let proposalResult = '';
+    try {
+      proposalResult = await callAI(
+        `あなたはITコンサルタントの提案設計AIです。案件情報と営業分析をもとに、提案書の骨子を作成してください。\n\n【出力フォーマット】\n■ 提案タイトル\n■ 解決アプローチ（3ステップ）\n■ 提供価値（具体的に）\n■ 必要なリソース（概要）\n■ リスクと前提条件\n\n日本語、簡潔に。余分な説明不要。`,
+        `案件情報：\n${caseInfo}\n\n営業AI分析：\n${salesResult}`
+      );
+    } catch(e) { proposalResult = `[エラー] ${e.message}`; }
+
+    setCardResult('proposal-card', proposalResult);
+    setStep(2, 'done'); await sleep(600); setStep(3, 'active');
+    addCard('finance-card', '💹', '財務AI', 'finance', '採算シミュレーション中...');
+
+    let financeResult = '';
+    try {
+      financeResult = await callAI(
+        `あなたは財務分析AIです。案件情報と提案内容をもとに、採算シミュレーションを行ってください。\n\n【出力フォーマット】\n■ 想定売上レンジ（楽観・中立・保守）\n■ 粗利率の目安\n■ キャッシュ回収時期の目安\n■ 注意すべきコスト項目\n■ GO/NO-GOの判断軸（3点）\n\n数字は概算でよい。日本語、簡潔に。`,
+        `案件情報：\n${caseInfo}\n\n提案内容：\n${proposalResult}`
+      );
+    } catch(e) { financeResult = `[エラー] ${e.message}`; }
+
+    setCardResult('finance-card', financeResult);
+    setStep(3, 'done'); await sleep(600); setStep(4, 'active');
+    addCard('quality-card', '🔍', '品質AI', 'quality', '矛盾・漏れを検査中...');
+
+    let qualityResult = '';
+    try {
+      qualityResult = await callAI(
+        `あなたは品質監査AIです。提案内容と財務試算を精査し、問題点・リスクを洗い出してください。\n\n【出力フォーマット】\n■ 前提の確認不足（要注意点）\n■ 数値・条件の矛盾や過信リスク\n■ 顧客に誤解を与えやすい表現\n■ 社長確認が必要な判断事項\n■ 総合評価（A/B/C）と根拠\n\n厳しく、具体的に。余分な説明不要。`,
+        `提案内容：\n${proposalResult}\n\n財務試算：\n${financeResult}`
+      );
+    } catch(e) { qualityResult = `[エラー] ${e.message}`; }
+
+    setCardResult('quality-card', qualityResult);
+    setStep(4, 'done'); await sleep(600); setStep(5, 'active');
+
+    addCard('ceo-card', '👤', '司令塔 — 社長承認', 'ceo', 'サマリー生成中...');
+
+    let ceoResult = '';
+    try {
+      ceoResult = await callAI(
+        `あなたは1人社長の参謀AIです。各AIの分析結果をもとに、社長が30秒で意思決定できるブリーフィングを作成してください。\n\n【出力フォーマット】\n━━━ 社長向けブリーフィング ━━━\n■ 案件一行サマリー\n■ この案件を受けるべき理由（2点）\n■ 受けない場合のリスク\n■ 今すぐ確認すべきこと（1点）\n■ 推奨アクション\n\n1分で読める量で。判断しやすく。`,
+        `案件：${caseInfo}\n\n営業分析：${salesResult}\n\n提案：${proposalResult}\n\n財務：${financeResult}\n\n品質：${qualityResult}`
+      );
+    } catch(e) { ceoResult = `[エラー] ${e.message}`; }
+
+    const ceoBody = document.getElementById('ceo-card-body');
+    const ceoStatus = document.getElementById('ceo-card-status');
+    ceoBody.innerHTML = `
+      <div style="white-space:pre-wrap;line-height:1.8;font-size:14px">${ceoResult}</div>
+      <div class="ceo-panel">
+        <h3>⚡ 社長の意思決定</h3>
+        <p style="font-size:13px;color:var(--text-dim);line-height:1.6">上記の内容を確認し、この案件への対応を決定してください。</p>
+        <div class="approve-btns">
+          <button class="btn-approve go" onclick="finalDecision('go')">✅ この案件を進める</button>
+          <button class="btn-approve back" onclick="finalDecision('back')">🔄 条件を修正して再検討</button>
+        </div>
+      </div>`;
+    ceoStatus.textContent = '判断待ち';
+    isRunning = false;
+  }
+
+  function finalDecision(decision) {
+    setStep(5, 'done');
+    const area = document.getElementById('results-area');
+    const final = document.createElement('div');
+    final.className = 'final-result';
+    if (decision === 'go') {
+      final.innerHTML = `
+        <div style="font-size:40px;margin-bottom:12px">🚀</div>
+        <h2>案件承認 — 前進</h2>
+        <p>社長承認が完了しました。<br>次のステップ：初回面談のアポ取り → 提案書精査 → 顧客提出</p>`;
     } else {
-      body.classList.remove('typing');
+      final.innerHTML = `
+        <div style="font-size:40px;margin-bottom:12px">🔄</div>
+        <h2>条件修正 — 再検討</h2>
+        <p>品質AIの指摘事項を確認し、前提条件を修正して再フローを回してください。</p>
+        <button class="btn-reset" onclick="resetAll()" style="margin-top:16px;max-width:300px">新しい案件情報で再入力する</button>`;
+    }
+    area.appendChild(final);
+    setTimeout(() => final.classList.add('visible'), 100);
+  }
+
+  function resetAll() {
+    document.getElementById('results-area').innerHTML = '';
+    document.getElementById('start-btn').disabled = false;
+    isRunning = false;
+    const labels = ['入力','営','提','財','品','社'];
+    for (let i = 0; i <= 5; i++) {
+      const el = document.getElementById(`step-${i}`);
+      if (el) { el.className = 'flow-step'; el.querySelector('.flow-dot').textContent = labels[i]; }
     }
   }
-  typeChar();
-}
 
-async function callClaude(systemPrompt, userMessage) {
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userMessage }]
-    })
-  });
-  const data = await res.json();
-  if (data.content && data.content[0]) {
-    return data.content[0].text;
-  }
-  throw new Error('API error: ' + JSON.stringify(data));
-}
-
-async function startFlow() {
-  if (isRunning) return;
-
-  const company = document.getElementById('company').value.trim();
-  const industry = document.getElementById('industry').value;
-  const issue = document.getElementById('issue').value.trim();
-  const budget = document.getElementById('budget').value;
-  const timeline = document.getElementById('timeline').value;
-
-  if (!company || !issue) {
-    alert('顧客企業名と相談内容を入力してください');
-    return;
-  }
-
-  isRunning = true;
-  document.getElementById('start-btn').disabled = true;
-  document.getElementById('results-area').innerHTML = '';
-
-  const caseInfo = `
-企業名：${company}
-業種：${industry || '不明'}
-相談内容：${issue}
-予算感：${budget || '未定'}
-納期：${timeline || '未定'}
-  `.trim();
-
-  // ─── Step 1: 営業AI ───
-  setStep(0, 'done');
-  setStep(1, 'active');
-  addCard('sales-card', '📊', '営業AI', 'sales', '顧客課題を分析中...');
-  await sleep(400);
-
-  let salesResult = '';
-  try {
-    salesResult = await callClaude(
-      `あなたは法人営業の専門家AIです。
-案件情報を受け取り、以下を簡潔に整理してください。出力は日本語、箇条書きで簡潔に。
-
-【出力フォーマット】
-■ 顧客の課題仮説（2〜3点）
-■ 提案の切り口（2案）
-■ 初回面談で確認すべき質問（3つ）
-■ 初回接触メール 件名と本文（100字以内）
-
-余分な説明は不要。フォーマット通りに出力。`,
-      `案件情報：\n${caseInfo}`
-    );
-  } catch (e) {
-    salesResult = `[エラー] API呼び出しに失敗しました。\n${e.message}`;
-  }
-
-  setCardResult('sales-card', salesResult);
-  setStep(1, 'done');
-  await sleep(600);
-
-  // ─── Step 2: 提案AI ───
-  setStep(2, 'active');
-  addCard('proposal-card', '📝', '提案AI', 'proposal', '提案骨子を構築中...');
-
-  let proposalResult = '';
-  try {
-    proposalResult = await callClaude(
-      `あなたはITコンサルタントの提案設計AIです。
-案件情報と営業分析をもとに、提案書の骨子を作成してください。
-
-【出力フォーマット】
-■ 提案タイトル
-■ 解決アプローチ（3ステップ）
-■ 提供価値（具体的に）
-■ 必要なリソース（概要）
-■ リスクと前提条件
-
-日本語、簡潔に。余分な説明不要。`,
-      `案件情報：\n${caseInfo}\n\n営業AI分析：\n${salesResult}`
-    );
-  } catch (e) {
-    proposalResult = `[エラー] ${e.message}`;
-  }
-
-  setCardResult('proposal-card', proposalResult);
-  setStep(2, 'done');
-  await sleep(600);
-
-  // ─── Step 3: 財務AI ───
-  setStep(3, 'active');
-  addCard('finance-card', '💹', '財務AI', 'finance', '採算シミュレーション中...');
-
-  let financeResult = '';
-  try {
-    financeResult = await callClaude(
-      `あなたは財務分析AIです。
-案件情報と提案内容をもとに、採算シミュレーションを行ってください。
-
-【出力フォーマット】
-■ 想定売上レンジ（楽観・中立・保守）
-■ 粗利率の目安
-■ キャッシュ回収時期の目安
-■ 注意すべきコスト項目
-■ GO/NO-GOの判断軸（3点）
-
-数字は概算でよい。日本語、簡潔に。`,
-      `案件情報：\n${caseInfo}\n\n提案内容：\n${proposalResult}`
-    );
-  } catch (e) {
-    financeResult = `[エラー] ${e.message}`;
-  }
-
-  setCardResult('finance-card', financeResult);
-  setStep(3, 'done');
-  await sleep(600);
-
-  // ─── Step 4: 品質AI ───
-  setStep(4, 'active');
-  addCard('quality-card', '🔍', '品質AI', 'quality', '矛盾・漏れを検査中...');
-
-  let qualityResult = '';
-  try {
-    qualityResult = await callClaude(
-      `あなたは品質監査AIです。
-提案内容と財務試算を精査し、問題点・リスクを洗い出してください。
-
-【出力フォーマット】
-■ 前提の確認不足（要注意点）
-■ 数値・条件の矛盾や過信リスク
-■ 顧客に誤解を与えやすい表現
-■ 社長確認が必要な判断事項
-■ 総合評価（A/B/C）と根拠
-
-厳しく、具体的に。余分な説明不要。`,
-      `提案内容：\n${proposalResult}\n\n財務試算：\n${financeResult}`
-    );
-  } catch (e) {
-    qualityResult = `[エラー] ${e.message}`;
-  }
-
-  setCardResult('quality-card', qualityResult);
-  setStep(4, 'done');
-  await sleep(600);
-
-  // ─── Step 5: 社長承認 ───
-  setStep(5, 'active');
-  addCEOPanel(caseInfo, salesResult, proposalResult, financeResult, qualityResult);
-}
-
-function addCEOPanel(caseInfo, sales, proposal, finance, quality) {
-  const area = document.getElementById('results-area');
-  const card = document.createElement('div');
-  card.className = 'result-card';
-  card.id = 'ceo-card';
-  card.innerHTML = `
-    <div class="result-header">
-      <div class="result-header-left">
-        <span style="font-size:18px">👤</span>
-        <span class="ai-badge ceo">司令塔 — 社長承認</span>
-      </div>
-      <span class="status-chip processing" id="ceo-card-status">判断待ち</span>
-    </div>
-    <div class="result-body" id="ceo-card-body">
-      <div class="processing-dots">
-        <span></span><span></span><span></span>
-        <span style="margin-left:8px;font-family:'Noto Sans JP';font-size:13px;color:var(--text-muted)">サマリー生成中...</span>
-      </div>
-    </div>
-  `;
-  area.appendChild(card);
-  setTimeout(() => card.classList.add('visible'), 50);
-
-  // Generate CEO summary
-  callClaude(
-    `あなたは1人社長の参謀AIです。
-各AIの分析結果をもとに、社長が30秒で意思決定できるブリーフィングを作成してください。
-
-【出力フォーマット】
-━━━ 社長向けブリーフィング ━━━
-■ 案件一行サマリー
-■ この案件を受けるべき理由（2点）
-■ 受けない場合のリスク
-■ 今すぐ確認すべきこと（1点）
-■ 推奨アクション
-
-1分で読める量で。判断しやすく。`,
-    `案件：${caseInfo}\n\n営業分析：${sales}\n\n提案：${proposal}\n\n財務：${finance}\n\n品質：${quality}`
-  ).then(summary => {
-    const body = document.getElementById('ceo-card-body');
-    body.innerHTML = `<div style="white-space:pre-wrap;line-height:1.8;font-size:14px">${summary}</div>
-    <div class="ceo-panel">
-      <h3>⚡ 社長の意思決定</h3>
-      <p style="font-size:13px;color:var(--text-dim);line-height:1.6">上記の内容を確認し、この案件への対応を決定してください。</p>
-      <div class="approve-btns">
-        <button class="btn-approve go" onclick="finalDecision('go')">✅ この案件を進める</button>
-        <button class="btn-approve back" onclick="finalDecision('back')">🔄 条件を修正して再検討</button>
-      </div>
-    </div>`;
-    document.getElementById('ceo-card-status').textContent = '判断待ち';
-  }).catch(e => {
-    document.getElementById('ceo-card-body').textContent = `[エラー] ${e.message}`;
-  });
-}
-
-function finalDecision(decision) {
-  setStep(5, 'done');
-  const area = document.getElementById('results-area');
-
-  const final = document.createElement('div');
-  final.className = 'final-result';
-
-  if (decision === 'go') {
-    final.innerHTML = `
-      <div style="font-size:40px;margin-bottom:12px">🚀</div>
-      <h2>案件承認 — 前進</h2>
-      <p style="margin-top:8px">社長承認が完了しました。<br>営業AIが初回アプローチ文面の最終版を準備します。</p>
-      <div style="margin-top:20px;padding:16px;background:rgba(74,240,176,0.07);border-radius:8px;font-size:12px;color:var(--text-dim);line-height:1.8">
-        次のステップ：初回面談のアポ取り → 提案書精査 → 顧客提出
-      </div>
-    `;
-  } else {
-    final.innerHTML = `
-      <div style="font-size:40px;margin-bottom:12px">🔄</div>
-      <h2>条件修正 — 再検討</h2>
-      <p style="margin-top:8px">品質AIの指摘事項を確認し、<br>前提条件を修正して再フローを回してください。</p>
-      <button class="btn-reset" onclick="resetAll()" style="margin-top:16px;max-width:300px">
-        新しい案件情報で再入力する
-      </button>
-    `;
-  }
-
-  area.appendChild(final);
-  setTimeout(() => final.classList.add('visible'), 100);
-  isRunning = false;
-}
-
-function resetAll() {
-  document.getElementById('results-area').innerHTML = '';
-  document.getElementById('start-btn').disabled = false;
-  isRunning = false;
-  for (let i = 0; i <= 5; i++) {
-    const el = document.getElementById(`step-${i}`);
-    if (el) {
-      el.className = 'flow-step';
-      const dot = el.querySelector('.flow-dot');
-      const labels = ['入力','営','提','財','品','社'];
-      dot.textContent = labels[i];
-    }
-  }
-}
-
-function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
-}
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 </script>
 </body>
 </html>
