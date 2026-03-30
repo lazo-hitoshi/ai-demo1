@@ -1,9 +1,15 @@
 {
-  "outputDirectory": "public",
-  "functions": {
-    "api/chat.js": {
-      "memory": 128,
-      "maxDuration": 30
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
     }
-  }
+  ]
 }
+```
+
+**「Commit changes」** を押して、3分待ってから：
+```
+https://ai-demo1-eta.vercel.app
