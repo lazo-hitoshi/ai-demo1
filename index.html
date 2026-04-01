@@ -105,6 +105,30 @@ select option { background: var(--surface2); }
 .final-result p { color: var(--text-dim); font-size: 13px; line-height: 1.6; }
 /* Edited badge */
 .edited-badge { font-size: 10px; padding: 2px 8px; background: rgba(245,166,35,0.15); color: #f5a623; border: 1px solid rgba(245,166,35,0.3); border-radius: 4px; font-family: 'Space Mono', monospace; }
+/* Easy explain panel */
+.explain-panel { margin: 0 16px 16px; background: linear-gradient(135deg, rgba(45,156,219,0.06), rgba(45,156,219,0.02)); border: 1px solid rgba(45,156,219,0.3); border-radius: 8px; overflow: hidden; }
+.explain-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: rgba(45,156,219,0.08); border-bottom: 1px solid rgba(45,156,219,0.2); font-size: 12px; font-weight: 700; color: #2d9cdb; letter-spacing: 0.05em; }
+.explain-body { padding: 14px; font-size: 14px; line-height: 1.9; color: var(--text); white-space: pre-wrap; }
+/* Quiz panel */
+.quiz-panel { margin: 0 16px 16px; background: linear-gradient(135deg, rgba(192,132,252,0.06), rgba(192,132,252,0.02)); border: 1px solid rgba(192,132,252,0.3); border-radius: 8px; overflow: hidden; }
+.quiz-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: rgba(192,132,252,0.08); border-bottom: 1px solid rgba(192,132,252,0.2); font-size: 12px; font-weight: 700; color: #c084fc; letter-spacing: 0.05em; }
+.quiz-body { padding: 14px; }
+.quiz-question { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 12px; line-height: 1.6; }
+.quiz-question::before { content: 'Q. '; color: #c084fc; font-weight: 700; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.quiz-option { padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--text); transition: all 0.2s; text-align: left; font-family: 'Noto Sans JP', sans-serif; }
+.quiz-option:hover { border-color: #c084fc; background: rgba(192,132,252,0.08); }
+.quiz-option.correct { border-color: #4af0b0; background: rgba(74,240,176,0.1); color: #4af0b0; font-weight: 700; }
+.quiz-option.wrong { border-color: #ef4444; background: rgba(239,68,68,0.08); color: #ef4444; }
+.quiz-feedback { padding: 12px 14px; border-radius: 6px; font-size: 13px; line-height: 1.7; margin-top: 8px; }
+.quiz-feedback.correct { background: rgba(74,240,176,0.08); border: 1px solid rgba(74,240,176,0.3); color: var(--text); }
+.quiz-feedback.wrong { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); color: var(--text); }
+.quiz-progress { display: flex; gap: 6px; margin-bottom: 14px; }
+.quiz-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+.quiz-dot.done { background: #4af0b0; }
+.quiz-dot.active { background: #c084fc; animation: pulse 1s ease-in-out infinite; }
+.quiz-score { text-align: center; padding: 16px; font-size: 18px; font-weight: 700; color: #c084fc; }
+.quiz-score-sub { font-size: 13px; color: var(--text-dim); font-weight: 300; margin-top: 4px; }
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
@@ -222,12 +246,135 @@ function addEditToolbar(cardId, resultKey) {
   const card = document.getElementById(cardId);
   const existing = card.querySelector('.edit-toolbar');
   if (existing) existing.remove();
+  // Remove old explain/quiz panels too
+  const oldExplain = card.querySelector('.explain-panel');
+  if (oldExplain) oldExplain.remove();
+  const oldQuiz = card.querySelector('.quiz-panel');
+  if (oldQuiz) oldQuiz.remove();
   const toolbar = document.createElement('div');
   toolbar.className = 'edit-toolbar';
   toolbar.innerHTML = `
-    <button class="btn-edit" onclick="startEdit('${cardId}', '${resultKey}')">✏️ 内容を手直しする</button>
-    <button class="btn-edit" onclick="rerunFromHere('${resultKey}')" style="margin-left:auto">🔄 この内容で次のAIへ</button>`;
+    <button class="btn-edit" onclick="startEdit('${cardId}', '${resultKey}')">✏️ 手直しする</button>
+    <button class="btn-edit" onclick="showEasyExplain('${cardId}', '${resultKey}')" style="color:#2d9cdb;border-color:rgba(45,156,219,0.3)">💡 わかりやすく</button>
+    <button class="btn-edit" onclick="startQuiz('${cardId}', '${resultKey}')" style="color:#c084fc;border-color:rgba(192,132,252,0.3)">🧠 理解度チェック</button>
+    <button class="btn-edit" onclick="rerunFromHere('${resultKey}')" style="margin-left:auto">🔄 次のAIへ</button>`;
   card.appendChild(toolbar);
+}
+
+async function showEasyExplain(cardId, resultKey) {
+  const card = document.getElementById(cardId);
+  const oldExplain = card.querySelector('.explain-panel');
+  if (oldExplain) { oldExplain.remove(); return; }
+  const panel = document.createElement('div');
+  panel.className = 'explain-panel';
+  panel.innerHTML = '<div class="explain-header">💡 わかりやすい説明</div><div class="explain-body"><div class="processing-dots"><span></span><span></span><span></span><span style="margin-left:8px;font-size:12px;color:var(--text-muted)">かみくだいて説明中...</span></div></div>';
+  const toolbar = card.querySelector('.edit-toolbar');
+  card.insertBefore(panel, toolbar);
+  try {
+    const res = await fetch(API, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({
+      systemPrompt: 'あなたはわかりやすく説明するAIです。難しい内容を誰でも理解できるように説明してください。\n\n【ルール】\n・中学生でもわかる言葉を使う\n・専門用語には必ず説明をつける\n・箇条書きで整理する\n・なぜそうなるかの理由も説明する\n・絵に描けるような具体例を使う',
+      userMessage: '以下の内容をわかりやすく説明してください：\n\n' + results[resultKey]
+    }) });
+    const data = await res.json();
+    panel.querySelector('.explain-body').textContent = data.error ? '[エラー] ' + data.error : data.text;
+  } catch(e) { panel.querySelector('.explain-body').textContent = '[エラー] ' + e.message; }
+}
+
+let quizData = {};
+
+async function startQuiz(cardId, resultKey) {
+  const card = document.getElementById(cardId);
+  const oldQuiz = card.querySelector('.quiz-panel');
+  if (oldQuiz) { oldQuiz.remove(); return; }
+  const panel = document.createElement('div');
+  panel.className = 'quiz-panel';
+  panel.innerHTML = '<div class="quiz-header">🧠 理解度チェック</div><div class="quiz-body"><div class="processing-dots"><span></span><span></span><span></span><span style="margin-left:8px;font-size:12px;color:var(--text-muted)">問題を作成中...</span></div></div>';
+  const toolbar = card.querySelector('.edit-toolbar');
+  card.insertBefore(panel, toolbar);
+  try {
+    const res = await fetch(API, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({
+      systemPrompt: 'あなたは理解度確認のクイズを作るAIです。以下のJSONのみ出力してください（説明不要）：{"q1":{"question":"問題文","options":["A.選択肢1","B.選択肢2","C.選択肢3"],"answer":"A","reason":"正解の理由と解説"},"q2":{"question":"問題文","options":["A.選択肢1","B.選択肢2","C.選択肢3"],"answer":"B","reason":"正解の理由と解説"},"q3":{"question":"問題文","options":["A.選択肢1","B.選択肢2","C.選択肢3"],"answer":"C","reason":"正解の理由と解説"}}',
+      userMessage: '以下の内容についての理解度チェッククイズを3問作成してください：\n\n' + results[resultKey]
+    }) });
+    const data = await res.json();
+    const clean = data.text.replace(/```json|```/g,'').trim();
+    const quiz = JSON.parse(clean);
+    quizData[cardId] = { quiz, currentQ: 0, score: 0 };
+    showQuizQuestion(cardId, 0);
+  } catch(e) {
+    panel.querySelector('.quiz-body').innerHTML = '<p style="padding:14px;color:#ef4444">クイズの生成に失敗しました。もう一度試してください。</p>';
+  }
+}
+
+function showQuizQuestion(cardId, qIdx) {
+  const card = document.getElementById(cardId);
+  const panel = card.querySelector('.quiz-panel');
+  const qd = quizData[cardId];
+  const questions = [qd.quiz.q1, qd.quiz.q2, qd.quiz.q3];
+  const q = questions[qIdx];
+  const progressDots = [0,1,2].map(i => {
+    if (i < qIdx) return '<div class="quiz-dot done"></div>';
+    if (i === qIdx) return '<div class="quiz-dot active"></div>';
+    return '<div class="quiz-dot"></div>';
+  }).join('');
+  panel.querySelector('.quiz-body').innerHTML = `
+    <div class="quiz-progress">${progressDots}</div>
+    <div class="quiz-question">${q.question}</div>
+    <div class="quiz-options">
+      ${q.options.map((opt, i) => `<button class="quiz-option" onclick="answerQuiz('${cardId}', ${qIdx}, '${opt.charAt(0)}')">${opt}</button>`).join('')}
+    </div>`;
+}
+
+function answerQuiz(cardId, qIdx, answer) {
+  const qd = quizData[cardId];
+  const questions = [qd.quiz.q1, qd.quiz.q2, qd.quiz.q3];
+  const q = questions[qIdx];
+  const correct = answer === q.answer;
+  if (correct) qd.score++;
+  // Highlight options
+  const card = document.getElementById(cardId);
+  const panel = card.querySelector('.quiz-panel');
+  const options = panel.querySelectorAll('.quiz-option');
+  options.forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent.startsWith(q.answer)) btn.classList.add('correct');
+    else if (btn.textContent.startsWith(answer) && !correct) btn.classList.add('wrong');
+  });
+  // Show feedback
+  const feedback = document.createElement('div');
+  feedback.className = 'quiz-feedback ' + (correct ? 'correct' : 'wrong');
+  feedback.innerHTML = (correct ? '✅ 正解！' : '❌ 不正解') + '\n\n' + q.reason;
+  panel.querySelector('.quiz-body').appendChild(feedback);
+  // Next button
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'btn-edit primary';
+  nextBtn.style.marginTop = '12px';
+  nextBtn.style.width = '100%';
+  nextBtn.style.padding = '10px';
+  if (qIdx < 2) {
+    nextBtn.textContent = '次の問題 ▶';
+    nextBtn.onclick = () => { qd.currentQ = qIdx + 1; showQuizQuestion(cardId, qIdx + 1); };
+  } else {
+    nextBtn.textContent = '結果を見る';
+    nextBtn.onclick = () => showQuizResult(cardId);
+  }
+  panel.querySelector('.quiz-body').appendChild(nextBtn);
+}
+
+function showQuizResult(cardId) {
+  const qd = quizData[cardId];
+  const card = document.getElementById(cardId);
+  const panel = card.querySelector('.quiz-panel');
+  const pct = Math.round(qd.score / 3 * 100);
+  const msg = pct === 100 ? '完璧！この内容はしっかり理解できています👏' :
+              pct >= 66 ? 'よく理解できています。一部復習しましょう。' :
+              'もう一度「わかりやすく」ボタンで確認してみましょう。';
+  panel.querySelector('.quiz-body').innerHTML = `
+    <div class="quiz-score">
+      ${qd.score} / 3 問正解（${pct}%）
+      <div class="quiz-score-sub">${msg}</div>
+    </div>
+    <button class="btn-edit" onclick="startQuiz('${cardId}', null)" style="width:100%;margin-top:8px;padding:10px;text-align:center">🔄 もう一度チャレンジ</button>`;
 }
 
 function startEdit(cardId, resultKey) {
