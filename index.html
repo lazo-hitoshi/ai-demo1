@@ -133,6 +133,46 @@ select option { background: #ffffff; color: #1a2332; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } .form-grid .span-2 { grid-column: span 1; } .approve-btns { grid-template-columns: 1fr; } .flow-label { font-size: 9px; } .save-bar { flex-direction: column; } }
+
+/* ===== 社内情報パネル ===== */
+.kb-panel { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 0; margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.kb-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; cursor: pointer; user-select: none; background: linear-gradient(135deg, #f0fdf8, #f0f9ff); border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+.kb-panel-header.open { border-bottom-color: var(--border); }
+.kb-panel-title { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; color: var(--accent); }
+.kb-panel-count { font-size: 11px; background: rgba(14,165,122,0.12); color: var(--accent); padding: 2px 8px; border-radius: 10px; font-family: 'Space Mono', monospace; }
+.kb-panel-toggle { font-size: 12px; color: var(--text-muted); transition: transform 0.3s; }
+.kb-panel-toggle.open { transform: rotate(180deg); }
+.kb-panel-body { display: none; padding: 16px 20px; }
+.kb-panel-body.open { display: block; }
+.kb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.kb-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; }
+.kb-item-name { font-size: 12px; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kb-item-del { border: none; background: transparent; cursor: pointer; color: var(--text-muted); font-size: 12px; padding: 0 2px; transition: color 0.2s; }
+.kb-item-del:hover { color: #ef4444; }
+.kb-add-row { display: flex; gap: 8px; }
+.kb-add-input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-family: 'Noto Sans JP', sans-serif; font-size: 13px; color: var(--text); background: var(--surface2); outline: none; }
+.kb-add-input:focus { border-color: var(--accent); }
+.kb-add-btn { padding: 8px 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-family: 'Noto Sans JP', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+.kb-add-btn:hover { background: #0b8c68; }
+.kb-active-badge { font-size: 11px; color: var(--accent); background: rgba(14,165,122,0.1); border: 1px solid rgba(14,165,122,0.3); border-radius: 4px; padding: 2px 8px; margin-top: 8px; display: inline-block; }
+
+/* ===== 多言語モーダル ===== */
+.lang-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.lang-modal { background: #fff; border-radius: 16px; padding: 28px; width: 100%; max-width: 520px; box-shadow: 0 24px 64px rgba(0,0,0,0.15); }
+.lang-modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.lang-modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+.lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+.lang-btn { padding: 10px 8px; border: 1px solid var(--border); border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; font-size: 13px; color: var(--text); transition: all 0.2s; text-align: center; }
+.lang-btn:hover { border-color: var(--accent); background: rgba(14,165,122,0.06); color: var(--accent); }
+.lang-btn.selected { border-color: var(--accent); background: rgba(14,165,122,0.1); color: var(--accent); font-weight: 700; box-shadow: 0 0 0 2px rgba(14,165,122,0.2); }
+.lang-modal-btns { display: flex; gap: 10px; }
+.btn-lang-run { flex: 1; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.btn-lang-run:hover:not(:disabled) { background: #0b8c68; }
+.btn-lang-run:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-lang-cancel { padding: 12px 20px; background: transparent; border: 1px solid var(--border); border-radius: 10px; font-family: 'Noto Sans JP', sans-serif; font-size: 14px; color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+.btn-lang-cancel:hover { border-color: var(--text-muted); }
+.lang-progress { text-align: center; padding: 20px; color: var(--text-muted); font-size: 14px; }
+.lang-result { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; max-height: 300px; overflow-y: auto; font-size: 13px; line-height: 1.8; white-space: pre-wrap; color: var(--text); margin-bottom: 16px; }
 </style>
 </head>
 <body>
@@ -150,6 +190,69 @@ select option { background: #ffffff; color: #1a2332; }
     <div class="flow-step" id="step-4"><div class="flow-dot">品</div><div class="flow-label">品質AI</div></div>
     <div class="flow-step" id="step-5"><div class="flow-dot">社</div><div class="flow-label">社長承認</div></div>
   </div>
+  <!-- 社内情報パネル -->
+  <div class="kb-panel" id="kb-panel">
+    <div class="kb-panel-header" onclick="toggleKB()" id="kb-panel-header">
+      <div class="kb-panel-title">
+        <span>📚</span>
+        <span>社内情報・自社データ</span>
+        <span class="kb-panel-count" id="kb-count">0件</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:12px;color:var(--text-muted)">登録するとAIが参照して精度が上がります</span>
+        <span class="kb-panel-toggle" id="kb-toggle">▼</span>
+      </div>
+    </div>
+    <div class="kb-panel-body" id="kb-body">
+      <div class="kb-grid" id="kb-grid"></div>
+      <div class="kb-add-row">
+        <input class="kb-add-input" id="kb-name-input" placeholder="情報名（例：工事単価表、社内ルール）" />
+        <button class="kb-add-btn" onclick="showKBModal()">＋ 情報を追加</button>
+      </div>
+      <div id="kb-active-msg" style="display:none">
+        <span class="kb-active-badge">✅ 社内情報をAIに反映中 — 案件分析時に参照されます</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- KB入力モーダル -->
+  <div id="kb-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px">
+    <div style="background:#fff;border-radius:16px;padding:28px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(0,0,0,0.15)">
+      <h3 style="font-size:17px;font-weight:700;margin-bottom:16px">📚 社内情報を追加</h3>
+      <label style="display:block;font-size:11px;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px">情報のタイトル</label>
+      <input type="text" id="kb-modal-title" placeholder="例：工事単価表、営業マニュアル、社内ルール集" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-family:'Noto Sans JP',sans-serif;font-size:14px;color:var(--text);background:var(--surface2);outline:none;margin-bottom:14px" />
+      <label style="display:block;font-size:11px;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px">内容（テキストで貼り付け）</label>
+      <textarea id="kb-modal-content" placeholder="マニュアルの内容、過去案件の情報、社内ルール、単価表などをここに貼り付けてください。&#10;&#10;例：&#10;・掘削工事単価：3,500円/m³&#10;・見積有効期限：30日&#10;・支払条件：月末締め翌月末払い&#10;・クレーム対応：24時間以内に一次連絡" style="width:100%;min-height:140px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-family:'Noto Sans JP',sans-serif;font-size:13px;color:var(--text);background:var(--surface2);outline:none;resize:vertical"></textarea>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button onclick="saveKBItem()" style="flex:1;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:700;cursor:pointer">保存する</button>
+        <button onclick="closeKBModal()" style="padding:12px 20px;background:transparent;border:1px solid var(--border);border-radius:8px;font-family:'Noto Sans JP',sans-serif;font-size:14px;color:var(--text-dim);cursor:pointer">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 多言語出力モーダル -->
+  <div class="lang-modal-overlay" id="lang-modal" style="display:none">
+    <div class="lang-modal">
+      <h3>🌏 多言語で出力</h3>
+      <p class="lang-modal-sub">出力したい言語を選んでください。<br>議事録・分析結果を選んだ言語に翻訳してダウンロードできます。</p>
+      <div class="lang-grid" id="lang-grid"></div>
+      <div id="lang-progress" style="display:none" class="lang-progress">⏳ 翻訳中...</div>
+      <div id="lang-result-area" style="display:none">
+        <div class="lang-result" id="lang-result-text"></div>
+        <div style="display:flex;gap:8px">
+          <button onclick="downloadLangResult()" style="flex:1;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:700;cursor:pointer">📥 ダウンロード</button>
+          <button onclick="copyLangResult()" style="padding:10px 16px;background:transparent;border:1px solid var(--border);border-radius:8px;font-family:'Noto Sans JP',sans-serif;font-size:13px;color:var(--text-dim);cursor:pointer">📋 コピー</button>
+        </div>
+      </div>
+      <div id="lang-select-area">
+        <div class="lang-modal-btns">
+          <button class="btn-lang-run" id="lang-run-btn" onclick="runTranslation()" disabled>この言語で出力する</button>
+          <button class="btn-lang-cancel" onclick="closeLangModal()">キャンセル</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="panel active-panel" id="input-panel">
     <div class="panel-header">
       <div class="panel-icon">📋</div>
@@ -455,19 +558,19 @@ async function runFromStep(startKey, startIdx) {
     sales: {
       id: 'sales-card', icon: '📊', label: '営業AI', badge: 'sales', msg: '顧客課題を分析中...',
       step: 1,
-      system: `あなたは法人営業の専門家AIです。案件情報を受け取り、以下を簡潔に整理してください。\n\n【出力フォーマット】\n■ 顧客の課題仮説（2〜3点）\n■ 提案の切り口（2案）\n■ 初回面談で確認すべき質問（3つ）\n■ 初回接触メール 件名と本文（100字以内）\n\n余分な説明は不要。`,
+      system: `あなたは法人営業の専門家AIです。案件情報を受け取り、以下を簡潔に整理してください。\n\n【出力フォーマット】\n■ 顧客の課題仮説（2〜3点）\n■ 提案の切り口（2案）\n■ 初回面談で確認すべき質問（3つ）\n■ 初回接触メール 件名と本文（100字以内）\n\n余分な説明は不要。` + getKBSystemPrompt(),
       getInput: () => `案件情報：\n${caseInfo}`
     },
     proposal: {
       id: 'proposal-card', icon: '📝', label: '提案AI', badge: 'proposal', msg: '提案骨子を構築中...',
       step: 2,
-      system: `あなたはITコンサルタントの提案設計AIです。\n\n【出力フォーマット】\n■ 提案タイトル\n■ 解決アプローチ（3ステップ）\n■ 提供価値（具体的に）\n■ 必要なリソース（概要）\n■ リスクと前提条件\n\n日本語、簡潔に。`,
+      system: `あなたはITコンサルタントの提案設計AIです。\n\n【出力フォーマット】\n■ 提案タイトル\n■ 解決アプローチ（3ステップ）\n■ 提供価値（具体的に）\n■ 必要なリソース（概要）\n■ リスクと前提条件\n\n日本語、簡潔に。` + getKBSystemPrompt(),
       getInput: () => `案件情報：\n${caseInfo}\n\n営業AI分析：\n${results.sales}`
     },
     finance: {
       id: 'finance-card', icon: '💹', label: '財務AI', badge: 'finance', msg: '採算シミュレーション中...',
       step: 3,
-      system: `あなたは財務分析AIです。\n\n【出力フォーマット】\n■ 想定売上レンジ（楽観・中立・保守）\n■ 粗利率の目安\n■ キャッシュ回収時期の目安\n■ 注意すべきコスト項目\n■ GO/NO-GOの判断軸（3点）\n\n数字は概算でよい。`,
+      system: `あなたは財務分析AIです。\n\n【出力フォーマット】\n■ 想定売上レンジ（楽観・中立・保守）\n■ 粗利率の目安\n■ キャッシュ回収時期の目安\n■ 注意すべきコスト項目\n■ GO/NO-GOの判断軸（3点）\n\n数字は概算でよい。` + getKBSystemPrompt(),
       getInput: () => `案件情報：\n${caseInfo}\n\n提案内容：\n${results.proposal}`
     },
     quality: {
@@ -593,6 +696,7 @@ function approve(choice) {
         <div class="save-btns">
           <button class="btn-save secondary" onclick="downloadText()">📄 テキストで保存</button>
           <button class="btn-save primary" onclick="downloadMinutes()">📋 議事録として出力</button>
+          <button class="btn-save primary" onclick="openLangModal()" style="background:#2563eb">🌏 多言語で出力</button>
         </div>
       </div>`;
     area.appendChild(saveArea);
@@ -695,6 +799,185 @@ function downloadFile(filename, content, type) {
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ===== 社内情報（KB）=====
+let kbItems = JSON.parse(localStorage.getItem('sodan_kb') || '[]');
+
+function toggleKB() {
+  const body = document.getElementById('kb-body');
+  const header = document.getElementById('kb-panel-header');
+  const toggle = document.getElementById('kb-toggle');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  header.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('open', !isOpen);
+}
+
+function renderKB() {
+  const grid = document.getElementById('kb-grid');
+  const count = document.getElementById('kb-count');
+  const activeMsg = document.getElementById('kb-active-msg');
+  count.textContent = kbItems.length + '件';
+  activeMsg.style.display = kbItems.length > 0 ? 'block' : 'none';
+  grid.innerHTML = kbItems.map((item, i) => `
+    <div class="kb-item">
+      <span style="font-size:14px">📄</span>
+      <span class="kb-item-name" title="${item.title}">${item.title}</span>
+      <button class="kb-item-del" onclick="deleteKB(${i})">✕</button>
+    </div>`).join('');
+  localStorage.setItem('sodan_kb', JSON.stringify(kbItems));
+}
+
+function showKBModal() {
+  document.getElementById('kb-modal').style.display = 'flex';
+  const nameInput = document.getElementById('kb-name-input').value.trim();
+  if (nameInput) document.getElementById('kb-modal-title').value = nameInput;
+  document.getElementById('kb-modal-title').focus();
+}
+
+function closeKBModal() {
+  document.getElementById('kb-modal').style.display = 'none';
+  document.getElementById('kb-modal-title').value = '';
+  document.getElementById('kb-modal-content').value = '';
+  document.getElementById('kb-name-input').value = '';
+}
+
+function saveKBItem() {
+  const title = document.getElementById('kb-modal-title').value.trim();
+  const content = document.getElementById('kb-modal-content').value.trim();
+  if (!title || !content) { alert('タイトルと内容を入力してください'); return; }
+  kbItems.push({ title, content });
+  renderKB();
+  closeKBModal();
+}
+
+function deleteKB(i) {
+  if (!confirm(`「${kbItems[i].title}」を削除しますか？`)) return;
+  kbItems.splice(i, 1);
+  renderKB();
+}
+
+function getKBSystemPrompt() {
+  if (kbItems.length === 0) return '';
+  let kb = '\n\n【自社・社内情報（必ず参照すること）】\n';
+  kbItems.forEach(item => { kb += `\n■ ${item.title}\n${item.content}\n`; });
+  kb += '\n上記の社内情報を優先して分析・回答に反映してください。';
+  return kb;
+}
+
+// KB参照をAPI呼び出しに組み込む
+const _origCallAI = window.callAI;
+
+// Inject KB into system prompts
+const _origRunFromStep = runFromStep;
+
+// Override fetch calls to inject KB
+const _origFetch = window.fetch;
+// We'll inject KB via system prompt modification in the existing flow
+// Add KB notice to caseInfo when running
+const _origStartFlow = startFlow;
+
+renderKB();
+
+// ===== 多言語出力 =====
+const LANGUAGES = [
+  { code: 'en', label: '🇺🇸 英語', name: 'English' },
+  { code: 'zh', label: '🇨🇳 中国語', name: '中文（简体）' },
+  { code: 'ko', label: '🇰🇷 韓国語', name: '한국어' },
+  { code: 'es', label: '🇪🇸 スペイン語', name: 'Español' },
+  { code: 'vi', label: '🇻🇳 ベトナム語', name: 'Tiếng Việt' },
+  { code: 'th', label: '🇹🇭 タイ語', name: 'ภาษาไทย' },
+  { code: 'id', label: '🇮🇩 インドネシア語', name: 'Bahasa Indonesia' },
+  { code: 'pt', label: '🇧🇷 ポルトガル語', name: 'Português' },
+  { code: 'tl', label: '🇵🇭 タガログ語', name: 'Filipino' },
+  { code: 'de', label: '🇩🇪 ドイツ語', name: 'Deutsch' },
+  { code: 'fr', label: '🇫🇷 フランス語', name: 'Français' },
+  { code: 'hi', label: '🇮🇳 ヒンディー語', name: 'हिन्दी' },
+];
+
+let selectedLang = null;
+let langResultText = '';
+let langResultFilename = '';
+
+function openLangModal() {
+  selectedLang = null;
+  langResultText = '';
+  document.getElementById('lang-progress').style.display = 'none';
+  document.getElementById('lang-result-area').style.display = 'none';
+  document.getElementById('lang-select-area').style.display = 'block';
+  document.getElementById('lang-run-btn').disabled = true;
+  // Render language grid
+  const grid = document.getElementById('lang-grid');
+  grid.innerHTML = LANGUAGES.map(l => `
+    <button class="lang-btn" onclick="selectLang('${l.code}', this)" data-code="${l.code}">
+      ${l.label}<br><span style="font-size:11px;color:var(--text-muted)">${l.name}</span>
+    </button>`).join('');
+  document.getElementById('lang-modal').style.display = 'flex';
+}
+
+function selectLang(code, btn) {
+  selectedLang = LANGUAGES.find(l => l.code === code);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('lang-run-btn').disabled = false;
+  document.getElementById('lang-run-btn').textContent = `${selectedLang.label} で出力する`;
+}
+
+function closeLangModal() {
+  document.getElementById('lang-modal').style.display = 'none';
+}
+
+async function runTranslation() {
+  if (!selectedLang) return;
+  document.getElementById('lang-select-area').style.display = 'none';
+  document.getElementById('lang-progress').style.display = 'block';
+  document.getElementById('lang-progress').textContent = `⏳ ${selectedLang.label} に翻訳中...`;
+
+  const now = new Date();
+  const company = document.getElementById('company').value;
+  const sourceText = `案件情報：\n${caseInfo}\n\n営業AI分析：\n${results.sales}\n\n提案内容：\n${results.proposal}\n\n財務試算：\n${results.finance}\n\n品質管理：\n${results.quality}\n\n社長向けブリーフィング：\n${results.ceo}`;
+
+  try {
+    const res = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemPrompt: `You are a professional business document translator. Translate the following Japanese business document into ${selectedLang.name}. Keep the structure, formatting, and all section headers intact. Translate naturally and professionally for business use. Output only the translated content, no explanations.`,
+        userMessage: `Please translate this business report into ${selectedLang.name}:\n\n${sourceText}`
+      })
+    });
+    const data = await res.json();
+    langResultText = data.error ? '[Error] ' + data.error : data.text;
+    langResultFilename = `${company}_report_${selectedLang.code}_${now.toLocaleDateString('ja-JP').replace(/\//g,'-')}.txt`;
+    document.getElementById('lang-progress').style.display = 'none';
+    document.getElementById('lang-result-text').textContent = langResultText;
+    document.getElementById('lang-result-area').style.display = 'block';
+  } catch(e) {
+    document.getElementById('lang-progress').textContent = '[エラー] ' + e.message;
+  }
+}
+
+function downloadLangResult() {
+  const blob = new Blob([langResultText], { type: 'text/plain;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = langResultFilename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function copyLangResult() {
+  navigator.clipboard.writeText(langResultText).then(() => {
+    alert('コピーしました！');
+  });
+}
+
+// KB情報をcaseInfoに自動付加
+const _origStartFlow2 = startFlow;
+window.addEventListener('load', () => {
+  // Patch system prompts to include KB
+  const origRunFromStep2 = runFromStep;
+});
+
 </script>
 </body>
 </html>
