@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>業種別 現場相談AI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Bebas+Neue&display=swap');
+
+:root {
+  --bg: #080c14;
+  --surface: #0d1420;
+  --surface2: #131c2e;
+  --border: #1a2540;
+  --text: #e8eef8;
+  --text-muted: #4a5a7a;
+  --text-dim: #8898b8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.wrap { position: relative; z-index: 1; width: 100%; max-width: 860px; }
+
+.header { text-align: center; margin-bottom: 48px; }
+
+.header-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: #4af0b0;
+  margin-bottom: 16px;
+  display: block;
+}
+
+h1 {
+  font-size: clamp(24px, 5vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+h1 span { color: #4af0b0; }
+
+.sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 20px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  color: var(--text);
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); }
+.card:hover::before { opacity: 1; }
+
+.card.kensetsu::before { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+.card.it::before { background: linear-gradient(90deg, #4af0b0, #2d9cdb); }
+.card.energy::before { background: linear-gradient(90deg, #22c55e, #16a34a); }
+.card.fudosan::before { background: linear-gradient(90deg, #c084fc, #8b5cf6); }
+.card.ai::before { background: linear-gradient(90deg, #60a5fa, #4af0b0); }
+.card.dc::before { background: linear-gradient(90deg, #f59e0b, #60a5fa); }
+
+.card:hover.kensetsu { box-shadow: 0 8px 32px rgba(245,158,11,0.15); }
+.card:hover.it { box-shadow: 0 8px 32px rgba(74,240,176,0.15); }
+.card:hover.energy { box-shadow: 0 8px 32px rgba(34,197,94,0.15); }
+.card:hover.fudosan { box-shadow: 0 8px 32px rgba(192,132,252,0.15); }
+.card:hover.ai { box-shadow: 0 8px 32px rgba(96,165,250,0.15); }
+.card:hover.dc { box-shadow: 0 8px 32px rgba(245,158,11,0.15); }
+
+.card-icon { font-size: 36px; margin-bottom: 14px; display: block; }
+
+.card-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.card-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  display: block;
+}
+
+.card-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-family: monospace;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-top: 12px;
+  letter-spacing: 0.05em;
+}
+
+.tag-ready {
+  background: rgba(74,240,176,0.1);
+  color: #4af0b0;
+  border: 1px solid rgba(74,240,176,0.3);
+}
+
+.tag-soon {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.footer-note {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.footer-note a { color: #4af0b0; text-decoration: none; }
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 400px) {
+  .grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <span class="header-label">AI Support System — 1人社長 × AI執行部</span>
+    <h1>業種別<br><span>現場相談AI</span></h1>
+    <p class="sub">業種を選ぶと、その分野に特化したAIが<br>ヒアリング→分析→報連相サマリーを行います</p>
+  </div>
+
+  <div class="grid">
+    <a class="card kensetsu" href="kensetsu.html">
+      <span class="card-icon">🏗️</span>
+      <span class="card-name">建設・土木</span>
+      <span class="card-desc">工程・原価・安全・クレーム・人手不足など現場の困りごとを相談</span>
+      <span class="card-tag tag-ready">● 利用可能</span>
+    </a>
+
+    <a class="card it" href="it.html">
+      <span class="card-icon">💻</span>
+      <span class="card-name">IT・AI事業</span>
+      <span class="card-desc">開発・受注・外注・予算・スケジュール・技術選定など</span>
+      <span class="card-tag tag-ready">● 利用可能</span>
+    </a>
+
+    <a class="card energy" href="energy.html">
+      <span class="card-icon">⚡</span>
+      <span class="card-name">エネルギー・DX</span>
+      <span class="card-desc">LNG・太陽光・蓄電・系統連系・補助金・事業採算など</span>
+      <span class="card-tag tag-ready">● 利用可能</span>
+    </a>
+
+    <a class="card fudosan" href="fudosan.html">
+      <span class="card-icon">🏢</span>
+      <span class="card-name">不動産</span>
+      <span class="card-desc">売買・賃貸・地権者交渉・開発許可・資金調達など</span>
+      <span class="card-tag tag-ready">● 利用可能</span>
+    </a>
+
+    <a class="card ai" href="ai_jigyo.html">
+      <span class="card-icon">🤖</span>
+      <span class="card-name">AI・新規事業</span>
+      <span class="card-desc">事業計画・資金調達・提案・市場調査・パートナー交渉など</span>
+      <span class="card-tag tag-ready">● 利用可能</span>
+    </a>
+
+    <a class="card dc" href="dc.html">
+      <span class="card-icon">🖥️</span>
+      <span class="card-name">データセンター</span>
+      <span class="card-desc">電力設計・冷却・設備・用地・法規・事業採算など</span>
+      <span class="card-tag tag-ready">● 利用可能</span>
+    </a>
+  </div>
+
+  <div class="footer-note">
+    <p>案件判断フローデモは <a href="index.html">こちら</a></p>
+  </div>
+</div>
+</body>
+</html>

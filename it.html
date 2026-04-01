@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT・AI事業 現場相談AI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Bebas+Neue&display=swap');
+:root {
+  --bg: #081410;
+  --surface: #0d1e18;
+  --surface2: #132820;
+  --border: #1a3828;
+  --accent: #4af0b0;
+  --accent-rgb: 74,240,176;
+  --text: #f0f4f8;
+  --text-muted: #6a7a8a;
+  --text-dim: #9aaaba;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; font-weight: 300; min-height: 100vh; }
+body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(74,240,176,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(74,240,176,0.03) 1px, transparent 1px); background-size: 32px 32px; pointer-events: none; z-index: 0; }
+.container { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 32px 20px 80px; }
+.back { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); text-decoration: none; margin-bottom: 24px; transition: color 0.2s; }
+.back:hover { color: var(--accent); }
+.header { margin-bottom: 36px; border-left: 4px solid var(--accent); padding-left: 20px; }
+.header-label { font-family: 'Bebas Neue', sans-serif; font-size: 12px; letter-spacing: 0.3em; color: var(--accent); margin-bottom: 8px; display: block; }
+h1 { font-size: clamp(20px, 4vw, 28px); font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+.header-sub { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+.phase-bar { display: flex; gap: 4px; margin-bottom: 28px; }
+.phase-item { flex: 1; height: 4px; background: var(--border); border-radius: 2px; transition: background 0.4s; }
+.phase-item.active { background: var(--accent); }
+.phase-item.done { background: #22c55e; }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 16px; }
+.panel-title { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 16px; text-transform: uppercase; }
+.panel-title::before { content: ''; width: 3px; height: 16px; background: var(--accent); border-radius: 2px; flex-shrink: 0; }
+.cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.cat-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 12px; cursor: pointer; transition: all 0.2s; text-align: left; color: var(--text); font-family: 'Noto Sans JP', sans-serif; }
+.cat-btn:hover, .cat-btn.selected { border-color: var(--accent); background: rgba(74,240,176,0.08); }
+.cat-btn.selected { box-shadow: 0 0 0 1px var(--accent); }
+.cat-icon { font-size: 20px; margin-bottom: 6px; display: block; }
+.cat-name { font-size: 13px; font-weight: 700; display: block; margin-bottom: 2px; }
+.cat-desc { font-size: 11px; color: var(--text-muted); display: block; }
+label { display: block; font-size: 11px; font-weight: 500; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+textarea, input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: 300; padding: 12px 14px; outline: none; resize: vertical; transition: border-color 0.2s; }
+textarea:focus, input:focus { border-color: rgba(74,240,176,0.5); }
+textarea { min-height: 100px; }
+.btn-primary { width: 100%; padding: 14px; background: var(--accent); color: var(--bg); border: none; border-radius: 8px; font-family: 'Noto Sans JP', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(74,240,176,0.3); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-secondary { padding: 10px 20px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-muted); font-family: 'Noto Sans JP', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.hearing-panel { background: linear-gradient(135deg, rgba(74,240,176,0.06), rgba(74,240,176,0.02)); border: 1px solid rgba(74,240,176,0.3); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.hearing-q { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 12px; line-height: 1.6; }
+.hearing-q::before { content: 'Q. '; color: var(--accent); font-weight: 700; }
+.result-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; overflow: hidden; opacity: 0; transform: translateY(8px); transition: all 0.4s; }
+.result-card.visible { opacity: 1; transform: translateY(0); }
+.result-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--surface2); border-bottom: 1px solid var(--border); }
+.dept-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; color: var(--accent); }
+.status-tag { font-size: 10px; font-family: monospace; padding: 2px 8px; border-radius: 4px; background: rgba(74,240,176,0.1); color: var(--accent); border: 1px solid rgba(74,240,176,0.3); }
+.result-body { padding: 16px; font-size: 13px; line-height: 1.8; color: var(--text); white-space: pre-wrap; }
+.dots { display: inline-flex; align-items: center; gap: 4px; padding: 16px; color: var(--text-muted); font-size: 12px; }
+.dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: db 1.2s ease-in-out infinite; }
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes db { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; } 40% { transform: scale(1); opacity: 1; } }
+.typing::after { content: '█'; animation: blink 0.7s step-end infinite; color: var(--accent); font-size: 12px; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.final-box { background: linear-gradient(135deg, rgba(74,240,176,0.06), rgba(74,240,176,0.02)); border: 1px solid rgba(74,240,176,0.3); border-radius: 8px; padding: 24px; text-align: center; opacity: 0; transform: scale(0.97); transition: all 0.5s; }
+.final-box.visible { opacity: 1; transform: scale(1); }
+.final-box h2 { font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+.final-box p { color: var(--text-dim); font-size: 13px; line-height: 1.7; }
+.decision-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.btn-go { padding: 12px; background: var(--accent); color: var(--bg); border: none; border-radius: 6px; font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.btn-go:hover { filter: brightness(1.1); }
+.btn-hold { padding: 12px; background: transparent; border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; font-family: 'Noto Sans JP', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+.btn-hold:hover { border-color: #ef4444; color: #ef4444; }
+@media (max-width: 560px) { .cat-grid { grid-template-columns: 1fr; } .decision-btns { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back" href="soudan_top.html">← 業種選択に戻る</a>
+  <div class="header">
+    <span class="header-label">IT / AI Business Support</span>
+    <h1>IT・AI事業<br>現場相談AI</h1>
+    <p class="header-sub">困りごとを入力すると、各担当AIが分析・報連相形式でまとめ、代表者の判断を支援します</p>
+  </div>
+  <div class="phase-bar">
+    <div class="phase-item active" id="ph0"></div>
+    <div class="phase-item" id="ph1"></div>
+    <div class="phase-item" id="ph2"></div>
+    <div class="phase-item" id="ph3"></div>
+    <div class="phase-item" id="ph4"></div>
+  </div>
+  <div id="step-category" class="panel">
+    <div class="panel-title">困りごとの種類を選んでください</div>
+    <div class="cat-grid">
+      <button class="cat-btn" onclick="selectCat(this, 'dev')" data-key="dev">
+        <span class="cat-icon">💻</span>
+        <span class="cat-name">開発・納期問題</span>
+        <span class="cat-desc">遅延・品質・仕様変更</span>
+      </button>
+      <button class="cat-btn" onclick="selectCat(this, 'cost')" data-key="cost">
+        <span class="cat-icon">💴</span>
+        <span class="cat-name">見積・採算問題</span>
+        <span class="cat-desc">赤字・追加費用・請求</span>
+      </button>
+      <button class="cat-btn" onclick="selectCat(this, 'outsource')" data-key="outsource">
+        <span class="cat-icon">🤝</span>
+        <span class="cat-name">外注・委託トラブル</span>
+        <span class="cat-desc">品質不良・未納・契約</span>
+      </button>
+      <button class="cat-btn" onclick="selectCat(this, 'sales')" data-key="sales">
+        <span class="cat-icon">📊</span>
+        <span class="cat-name">営業・受注問題</span>
+        <span class="cat-desc">提案・競合・価格交渉</span>
+      </button>
+      <button class="cat-btn" onclick="selectCat(this, 'security')" data-key="security">
+        <span class="cat-icon">🔒</span>
+        <span class="cat-name">セキュリティ・法規</span>
+        <span class="cat-desc">情報漏洩・規約・契約</span>
+      </button>
+      <button class="cat-btn" onclick="selectCat(this, 'manpower')" data-key="manpower">
+        <span class="cat-icon">👥</span>
+        <span class="cat-name">人手不足・採用</span>
+        <span class="cat-desc">エンジニア不足・退職</span>
+      </button>
+    </div>
+  </div>
+  <div id="step-input" class="panel" style="display:none">
+    <div class="panel-title" id="input-title">状況を入力してください</div>
+    <div style="margin-bottom:16px">
+      <label>現在の状況・困っていること</label>
+      <textarea id="situation" placeholder="できるだけ具体的に書いてください"></textarea>
+    </div>
+    <div style="margin-bottom:4px">
+      <label>会社・事業の規模（任意）</label>
+      <input type="text" id="scale" placeholder="例：1人社長 / 従業員10名 / 起業2年目 など" />
+    </div>
+    <button class="btn-primary" id="hearing-btn" onclick="startHearing()">
+      <span>▶</span> AIにヒアリングしてもらう
+    </button>
+  </div>
+  <div id="step-hearing" style="display:none"></div>
+  <div id="step-results"></div>
+</div>
+<script>
+const API = 'https://ai-demo1-eta.vercel.app/api/chat';
+const CAT_LABELS = {"dev": "開発・納期問題", "cost": "見積・採算問題", "outsource": "外注・委託トラブル", "sales": "営業・受注問題", "security": "セキュリティ・法規問題", "manpower": "人手不足・採用問題"};
+const DEPTS = {"dev": [{"key": "pm", "icon": "📋", "label": "PM・工程管理AI", "badge": "pm", "msg": "開発工程を分析中..."}, {"key": "tech", "icon": "💻", "label": "技術・品質AI", "badge": "tech", "msg": "技術リスクを確認中..."}, {"key": "client", "icon": "🤝", "label": "顧客対応AI", "badge": "client", "msg": "クライアント対応案を作成中..."}], "cost": [{"key": "finance", "icon": "💴", "label": "財務・採算AI", "badge": "finance", "msg": "採算を試算中..."}, {"key": "negotiation", "icon": "🤝", "label": "交渉支援AI", "badge": "negotiation", "msg": "交渉方針を検討中..."}, {"key": "legal", "icon": "📋", "label": "法務・契約AI", "badge": "legal", "msg": "契約リスクを確認中..."}], "outsource": [{"key": "quality", "icon": "🔍", "label": "品質管理AI", "badge": "quality", "msg": "品質問題を分析中..."}, {"key": "legal", "icon": "📋", "label": "法務・契約AI", "badge": "legal", "msg": "契約・責任範囲を確認中..."}, {"key": "pm", "icon": "📋", "label": "PM・工程管理AI", "badge": "pm", "msg": "工程影響を試算中..."}], "sales": [{"key": "sales", "icon": "📊", "label": "営業戦略AI", "badge": "sales", "msg": "提案戦略を検討中..."}, {"key": "finance", "icon": "💴", "label": "財務・採算AI", "badge": "finance", "msg": "採算・価格を試算中..."}, {"key": "tech", "icon": "💻", "label": "技術・品質AI", "badge": "tech", "msg": "技術優位性を整理中..."}], "security": [{"key": "legal", "icon": "📋", "label": "法務・契約AI", "badge": "legal", "msg": "法的リスクを確認中..."}, {"key": "tech", "icon": "💻", "label": "技術・品質AI", "badge": "tech", "msg": "技術的対策を検討中..."}, {"key": "client", "icon": "🤝", "label": "顧客対応AI", "badge": "client", "msg": "説明・対応案を作成中..."}], "manpower": [{"key": "hr", "icon": "👥", "label": "人材・採用AI", "badge": "hr", "msg": "人材確保策を検討中..."}, {"key": "pm", "icon": "📋", "label": "PM・工程管理AI", "badge": "pm", "msg": "工程への影響を分析中..."}, {"key": "finance", "icon": "💴", "label": "財務・採算AI", "badge": "finance", "msg": "コスト影響を試算中..."}]};
+let selectedCat = '', hearingAnswers = [], hearingQuestions = [], currentQ = 0;
+
+function setPhase(n) {
+  for (let i = 0; i < 5; i++) {
+    const el = document.getElementById('ph'+i);
+    if (i < n) el.className = 'phase-item done';
+    else if (i === n) el.className = 'phase-item active';
+    else el.className = 'phase-item';
+  }
+}
+
+function selectCat(btn, key) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedCat = key;
+  document.getElementById('input-title').textContent = '【' + CAT_LABELS[key] + '】状況を入力してください';
+  document.getElementById('step-input').style.display = 'block';
+  document.getElementById('step-input').scrollIntoView({behavior:'smooth',block:'start'});
+  setPhase(1);
+}
+
+async function startHearing() {
+  const situation = document.getElementById('situation').value.trim();
+  const scale = document.getElementById('scale').value.trim();
+  if (!situation) { alert('状況を入力してください'); return; }
+  document.getElementById('hearing-btn').disabled = true;
+  setPhase(2);
+  const hearingArea = document.getElementById('step-hearing');
+  hearingArea.style.display = 'block';
+  hearingArea.innerHTML = '<div class="dots"><span></span><span></span><span></span><span style="margin-left:8px;font-size:12px;color:var(--text-muted)">状況を分析して質問を準備中...</span></div>';
+  const prompt = 'カテゴリ「' + CAT_LABELS[selectedCat] + '」の相談。状況：' + situation + '。規模：' + (scale||'不明') + '。この状況を深く理解するための重要な質問を2つ作成。以下JSONのみ出力：{"q1":"質問1","q2":"質問2"}';
+  try {
+    const res = await fetch(API, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemPrompt:'業界専門コンサルタントAI。JSONのみ出力。',userMessage:prompt})});
+    const data = await res.json();
+    const clean = data.text.replace(/```json|```/g,'').trim();
+    const qs = JSON.parse(clean);
+    hearingQuestions = [qs.q1, qs.q2];
+    hearingAnswers = ['',''];
+    showHearingQ(0, situation, scale);
+  } catch(e) {
+    hearingArea.innerHTML = '<p style="color:#ef4444;padding:16px">エラー：' + e.message + '</p>';
+  }
+}
+
+function showHearingQ(idx, situation, scale) {
+  const area = document.getElementById('step-hearing');
+  area.innerHTML = '<div class="hearing-panel"><div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;letter-spacing:0.08em">ヒアリング ' + (idx+1) + ' / ' + hearingQuestions.length + '</div><div class="hearing-q">' + hearingQuestions[idx] + '</div><textarea id="hearing-ans" placeholder="できるだけ具体的に回答してください" style="min-height:80px"></textarea><button class="btn-primary" onclick="submitHearing(' + idx + ', \'' + situation.replace(/'/g,"\\'") + '\', \'' + scale.replace(/'/g,"\\'") + '\')">' + (idx < hearingQuestions.length-1 ? '次の質問へ ▶' : '分析を開始する ▶') + '</button></div>';
+}
+
+function submitHearing(idx, situation, scale) {
+  const ans = document.getElementById('hearing-ans').value.trim();
+  if (!ans) { alert('回答を入力してください'); return; }
+  hearingAnswers[idx] = ans;
+  if (idx < hearingQuestions.length-1) { showHearingQ(idx+1, situation, scale); }
+  else { document.getElementById('step-hearing').style.display='none'; runAnalysis(situation, scale); }
+}
+
+async function runAnalysis(situation, scale) {
+  setPhase(3);
+  const resultsArea = document.getElementById('step-results');
+  resultsArea.innerHTML = '';
+  const context = 'カテゴリ：' + CAT_LABELS[selectedCat] + '\n規模：' + (scale||'不明') + '\n状況：' + situation + '\nQ1: ' + hearingQuestions[0] + ' → A: ' + hearingAnswers[0] + '\nQ2: ' + hearingQuestions[1] + ' → A: ' + hearingAnswers[1];
+  const targetDepts = DEPTS[selectedCat];
+  let allResults = [];
+  for (const dept of targetDepts) {
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    card.id = 'card-' + dept.key;
+    card.innerHTML = '<div class="result-header"><div class="dept-badge">' + dept.icon + ' ' + dept.label + '</div><span class="status-tag">分析中</span></div><div class="result-body" id="body-' + dept.key + '"><div class="dots"><span></span><span></span><span></span><span style="margin-left:8px;font-size:12px;color:var(--text-muted)">' + dept.msg + '</span></div></div>';
+    resultsArea.appendChild(card);
+    setTimeout(() => card.classList.add('visible'), 50);
+    let result = '';
+    try {
+      const res = await fetch(API, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemPrompt:'あなたは' + dept.label + 'です。相談内容を受け取り担当分野で分析してください。\n\n【出力】\n■ 状況認識\n■ リスク・問題点（2〜3点）\n■ 推奨アクション（3点）\n■ 代表者への報告事項\n\n簡潔に。',userMessage:'相談内容：\n' + context})});
+      const data = await res.json();
+      result = data.error ? '[エラー] ' + data.error : data.text;
+    } catch(e) { result = '[エラー] ' + e.message; }
+    allResults.push({dept: dept.label, result});
+    const body = document.getElementById('body-' + dept.key);
+    card.querySelector('.status-tag').textContent = '完了';
+    body.innerHTML = '';
+    body.classList.add('typing');
+    let i = 0;
+    await new Promise(resolve => {
+      function type() { if (i < result.length) { body.textContent += result[i++]; setTimeout(type, 6); } else { body.classList.remove('typing'); resolve(); } }
+      type();
+    });
+    await sleep(400);
+  }
+  await showFinalSummary(context, allResults);
+}
+
+async function showFinalSummary(context, allResults) {
+  setPhase(4);
+  const resultsArea = document.getElementById('step-results');
+  const summaryCard = document.createElement('div');
+  summaryCard.className = 'result-card';
+  summaryCard.innerHTML = '<div class="result-header"><div class="dept-badge">📊 報連相サマリー — 代表者へ</div><span class="status-tag">作成中</span></div><div class="result-body" id="body-summary"><div class="dots"><span></span><span></span><span></span><span style="margin-left:8px;font-size:12px;color:var(--text-muted)">各部署の報告を統合中...</span></div></div>';
+  resultsArea.appendChild(summaryCard);
+  setTimeout(() => summaryCard.classList.add('visible'), 50);
+  const deptSummary = allResults.map(r => '【' + r.dept + '】\n' + r.result).join('\n\n');
+  let summary = '';
+  try {
+    const res = await fetch(API, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemPrompt:'参謀AI。各部署報告を受け、代表者が30秒で判断できる報連相サマリーを作成。\n\n【出力】\n━━━ 代表者への報連相 ━━━\n■ 件名（一行）\n■ 現状（2行以内）\n■ 各部署からの要点\n■ 代表者が今すぐ決めること\n■ 推奨判断\n\n簡潔に。',userMessage:'相談情報：\n' + context + '\n\n各部署報告：\n' + deptSummary})});
+    const data = await res.json();
+    summary = data.error ? '[エラー] ' + data.error : data.text;
+  } catch(e) { summary = '[エラー] ' + e.message; }
+  const summaryBody = document.getElementById('body-summary');
+  summaryCard.querySelector('.status-tag').textContent = '完了';
+  summaryBody.innerHTML = '';
+  summaryBody.classList.add('typing');
+  let i = 0;
+  await new Promise(resolve => {
+    function type() { if (i < summary.length) { summaryBody.textContent += summary[i++]; setTimeout(type, 6); } else { summaryBody.classList.remove('typing'); resolve(); } }
+    type();
+  });
+  await sleep(500);
+  const finalBox = document.createElement('div');
+  finalBox.className = 'final-box';
+  finalBox.innerHTML = '<h2>⚡ 代表者の最終判断</h2><p>上記の報連相を確認し、対応方針を決定してください。</p><div class="decision-btns"><button class="btn-go" onclick="decide(\'go\')">✅ この方針で対応する</button><button class="btn-hold" onclick="decide(\'reset\')">🔄 状況を修正して再相談</button></div>';
+  resultsArea.appendChild(finalBox);
+  setTimeout(() => finalBox.classList.add('visible'), 100);
+}
+
+function decide(choice) {
+  const resultsArea = document.getElementById('step-results');
+  const done = document.createElement('div');
+  done.className = 'final-box';
+  if (choice === 'go') {
+    done.innerHTML = '<div style="font-size:36px;margin-bottom:12px">✅</div><h2>対応方針 確定</h2><p>代表者の判断が完了しました。<br>各担当AIの推奨アクションをもとに対応を進めてください。</p><a href="soudan_top.html" style="display:inline-block;margin-top:16px;padding:10px 24px;background:var(--accent);color:var(--bg);border-radius:6px;font-weight:700;text-decoration:none;font-size:13px">← 業種選択に戻る</a>';
+  } else {
+    done.innerHTML = '<div style="font-size:36px;margin-bottom:12px">🔄</div><h2>再相談</h2><p>状況を修正して再度相談してください。</p><button class="btn-secondary" onclick="location.reload()" style="margin-top:16px">最初からやり直す</button>';
+  }
+  resultsArea.appendChild(done);
+  setTimeout(() => done.classList.add('visible'), 100);
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+</script>
+</body>
+</html>
