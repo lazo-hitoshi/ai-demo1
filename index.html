@@ -173,6 +173,35 @@ select option { background: #ffffff; color: #1a2332; }
 .btn-lang-cancel:hover { border-color: var(--text-muted); }
 .lang-progress { text-align: center; padding: 20px; color: var(--text-muted); font-size: 14px; }
 .lang-result { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; max-height: 300px; overflow-y: auto; font-size: 13px; line-height: 1.8; white-space: pre-wrap; color: var(--text); margin-bottom: 16px; }
+
+/* ===== ファイルアップロード ===== */
+.file-upload-area { border: 2px dashed var(--border); border-radius: 12px; padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.3s; background: var(--surface2); margin-bottom: 16px; position: relative; }
+.file-upload-area:hover, .file-upload-area.dragover { border-color: var(--accent); background: rgba(14,165,122,0.04); }
+.file-upload-area.processing { border-color: #2563eb; background: rgba(37,99,235,0.04); cursor: not-allowed; }
+.file-upload-area.done { border-color: var(--accent); background: rgba(14,165,122,0.06); }
+.file-upload-icon { font-size: 36px; margin-bottom: 10px; }
+.file-upload-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.file-upload-sub { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.file-upload-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.file-upload-input.disabled { pointer-events: none; }
+.file-formats { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+.file-format-tag { font-size: 10px; padding: 2px 8px; border: 1px solid var(--border); border-radius: 4px; color: var(--text-muted); font-family: 'Space Mono', monospace; }
+.file-progress { margin-top: 12px; }
+.file-progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.file-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.5s; }
+.file-progress-text { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+.file-result { background: rgba(14,165,122,0.06); border: 1px solid rgba(14,165,122,0.3); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.file-result-icon { font-size: 20px; }
+.file-result-info { flex: 1; }
+.file-result-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.file-result-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.file-result-clear { border: none; background: transparent; cursor: pointer; color: var(--text-muted); font-size: 16px; padding: 4px; }
+.file-result-clear:hover { color: #ef4444; }
+.extract-preview { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 12px; font-size: 12px; color: var(--text-dim); line-height: 1.7; max-height: 100px; overflow: hidden; position: relative; }
+.extract-preview::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 30px; background: linear-gradient(transparent, var(--surface2)); }
+.or-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.or-divider span { font-size: 12px; color: var(--text-muted); }
 </style>
 </head>
 <body>
@@ -258,6 +287,43 @@ select option { background: #ffffff; color: #1a2332; }
       <div class="panel-icon">📋</div>
       <div><div class="panel-title">案件情報入力</div><div class="panel-subtitle">相談案件の概要を入力してください</div></div>
     </div>
+    <!-- ファイルアップロード -->
+    <div class="file-upload-area" id="upload-area" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+      <input type="file" class="file-upload-input" id="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif,.webp" onchange="handleFileSelect(event)" />
+      <div id="upload-default-view">
+        <div class="file-upload-icon">📁</div>
+        <div class="file-upload-title">資料・書類をここにドロップ</div>
+        <div class="file-upload-sub">または クリックしてファイルを選択<br>AIが内容を読み取り、入力欄に自動で流し込みます</div>
+        <div class="file-formats">
+          <span class="file-format-tag">PDF</span>
+          <span class="file-format-tag">Word</span>
+          <span class="file-format-tag">Excel</span>
+          <span class="file-format-tag">PowerPoint</span>
+          <span class="file-format-tag">画像</span>
+          <span class="file-format-tag">テキスト</span>
+        </div>
+      </div>
+      <div id="upload-processing-view" style="display:none">
+        <div class="file-upload-icon">⏳</div>
+        <div class="file-upload-title" id="upload-status-text">読み取り中...</div>
+        <div class="file-progress">
+          <div class="file-progress-bar"><div class="file-progress-fill" id="progress-fill" style="width:0%"></div></div>
+          <div class="file-progress-text" id="progress-text">ファイルを解析中...</div>
+        </div>
+      </div>
+    </div>
+    <div id="file-result-area" style="display:none">
+      <div class="file-result">
+        <span class="file-result-icon" id="file-icon">📄</span>
+        <div class="file-result-info">
+          <div class="file-result-name" id="file-name">ファイル名</div>
+          <div class="file-result-meta" id="file-meta">読み取り完了</div>
+        </div>
+        <button class="file-result-clear" onclick="clearFile()" title="ファイルをクリア">✕</button>
+      </div>
+      <div class="extract-preview" id="extract-preview"></div>
+    </div>
+    <div class="or-divider"><span>または手動で入力</span></div>
     <div class="form-grid">
       <div><label>顧客企業名</label><input type="text" id="company" placeholder="例：株式会社ABCテクノロジー" /></div>
       <div><label>業種</label>
@@ -796,6 +862,246 @@ function downloadFile(filename, content, type) {
   a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+
+// ===== ファイルアップロード・読み取り =====
+const FILE_ICONS = { pdf:'📕', doc:'📘', docx:'📘', xls:'📗', xlsx:'📗', ppt:'📙', pptx:'📙', txt:'📄', jpg:'🖼️', jpeg:'🖼️', png:'🖼️', gif:'🖼️', webp:'🖼️' };
+
+function handleDragOver(e) { e.preventDefault(); document.getElementById('upload-area').classList.add('dragover'); }
+function handleDragLeave(e) { document.getElementById('upload-area').classList.remove('dragover'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-area').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+}
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) processFile(file);
+}
+
+function clearFile() {
+  document.getElementById('file-result-area').style.display = 'none';
+  document.getElementById('upload-area').className = 'file-upload-area';
+  document.getElementById('upload-default-view').style.display = 'block';
+  document.getElementById('upload-processing-view').style.display = 'none';
+  document.getElementById('file-input').value = '';
+}
+
+async function processFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const area = document.getElementById('upload-area');
+  area.className = 'file-upload-area processing';
+  document.getElementById('upload-default-view').style.display = 'none';
+  document.getElementById('upload-processing-view').style.display = 'block';
+  document.getElementById('upload-status-text').textContent = 'ファイルを読み取り中...';
+  setProgress(20, 'テキストを抽出中...');
+
+  let extractedText = '';
+  try {
+    if (['jpg','jpeg','png','gif','webp'].includes(ext)) {
+      // Image: use base64 + Claude vision
+      extractedText = await extractFromImage(file);
+    } else if (ext === 'txt') {
+      extractedText = await file.text();
+    } else if (ext === 'pdf') {
+      extractedText = await extractFromPDF(file);
+    } else if (['doc','docx'].includes(ext)) {
+      extractedText = await extractFromDocx(file);
+    } else if (['xls','xlsx'].includes(ext)) {
+      extractedText = await extractFromExcel(file);
+    } else if (['ppt','pptx'].includes(ext)) {
+      extractedText = await extractFromPPTX(file);
+    } else {
+      extractedText = await file.text();
+    }
+    setProgress(60, 'AIが内容を解析中...');
+    await analyzeAndFill(extractedText, file.name);
+    setProgress(100, '完了！');
+    // Show result
+    area.className = 'file-upload-area done';
+    document.getElementById('upload-processing-view').style.display = 'none';
+    document.getElementById('file-result-area').style.display = 'block';
+    document.getElementById('file-icon').textContent = FILE_ICONS[ext] || '📄';
+    document.getElementById('file-name').textContent = file.name;
+    document.getElementById('file-meta').textContent = `${(file.size/1024).toFixed(1)}KB · 読み取り完了 · 入力欄に反映しました`;
+    document.getElementById('extract-preview').textContent = extractedText.slice(0, 200) + '...';
+  } catch(e) {
+    area.className = 'file-upload-area';
+    document.getElementById('upload-default-view').style.display = 'block';
+    document.getElementById('upload-processing-view').style.display = 'none';
+    alert('ファイルの読み取りに失敗しました：' + e.message);
+  }
+}
+
+function setProgress(pct, text) {
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = text;
+}
+
+async function extractFromImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64 = e.target.result.split(',')[1];
+      const mediaType = file.type || 'image/jpeg';
+      try {
+        const res = await fetch(API, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            systemPrompt: 'この画像から読み取れるすべてのテキスト・情報を正確に抽出してください。名刺の場合は会社名・氏名・連絡先・役職を整理して出力してください。',
+            userMessage: `以下の画像からテキストを抽出してください。
+
+[IMAGE:${mediaType}:${base64}]`
+          })
+        });
+        const data = await res.json();
+        resolve(data.text || '');
+      } catch(err) { reject(err); }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function extractFromPDF(file) {
+  // Use FileReader to get base64, then send to Claude
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64 = e.target.result.split(',')[1];
+      try {
+        const res = await fetch(API, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            systemPrompt: 'PDFの内容をすべてテキストとして抽出してください。表・図の説明も含めてください。',
+            userMessage: `[PDF:${base64}]
+
+このPDFの内容をすべて抽出してください。`
+          })
+        });
+        const data = await res.json();
+        resolve(data.text || '');
+      } catch(err) {
+        // Fallback: try reading as text
+        try { resolve(await file.text()); } catch(e2) { reject(err); }
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function extractFromDocx(file) {
+  // Use mammoth.js via CDN
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        if (typeof mammoth === 'undefined') {
+          await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+        }
+        const result = await mammoth.extractRawText({ arrayBuffer: e.target.result });
+        resolve(result.value);
+      } catch(err) { reject(err); }
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function extractFromExcel(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        if (typeof XLSX === 'undefined') {
+          await loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
+        }
+        const wb = XLSX.read(e.target.result, {type:'array'});
+        let text = '';
+        wb.SheetNames.forEach(name => {
+          const ws = wb.Sheets[name];
+          text += `【シート：${name}】\n`;
+          text += XLSX.utils.sheet_to_csv(ws) + '\n\n';
+        });
+        resolve(text);
+      } catch(err) { reject(err); }
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function extractFromPPTX(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        if (typeof PptxGenJS === 'undefined' && typeof JSZip === 'undefined') {
+          await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+        }
+        const zip = await JSZip.loadAsync(e.target.result);
+        let text = '';
+        const slideFiles = Object.keys(zip.files).filter(f => f.match(/ppt\/slides\/slide[0-9]+\.xml$/));
+        slideFiles.sort();
+        for (let i = 0; i < slideFiles.length; i++) {
+          const xml = await zip.files[slideFiles[i]].async('string');
+          const matches = xml.match(/<a:t>([^<]+)<\/a:t>/g) || [];
+          const slideText = matches.map(m => m.replace(/<[^>]+>/g,'')).join(' ');
+          if (slideText.trim()) text += `【スライド${i+1}】\n${slideText}\n\n`;
+        }
+        resolve(text || 'テキストを抽出できませんでした');
+      } catch(err) { reject(err); }
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+async function analyzeAndFill(text, filename) {
+  // Ask Claude to extract structured info
+  const res = await fetch(API, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      systemPrompt: `あなたはビジネス文書解析AIです。提供されたテキストから案件情報を抽出し、以下のJSONのみ出力してください（説明不要）：
+{"company":"企業名（不明な場合は空文字）","industry":"業種（製造業/IT・ソフトウェア/建設・不動産/金融・保険/エネルギー・インフラ/医療・ヘルスケア/小売・EC/物流・倉庫/その他から選択）","issue":"課題・相談内容（文書から読み取れる問題・要望・背景を200字以内で）","budget":"予算感（〜100万円/100〜300万円/300〜500万円/500万〜1000万円/1000万円以上/未定から選択）","timeline":"納期感（1ヶ月以内/3ヶ月以内/6ヶ月以内/1年以内/1年以上/未定から選択）"}`,
+      userMessage: `以下の文書から案件情報を抽出してください：\n\nファイル名：${filename}\n\n${text.slice(0, 3000)}`
+    })
+  });
+  const data = await res.json();
+  try {
+    const clean = data.text.replace(/\`\`\`json|\`\`\`/g,'').trim();
+    const info = JSON.parse(clean);
+    // Fill form fields
+    if (info.company) document.getElementById('company').value = info.company;
+    if (info.issue) document.getElementById('issue').value = info.issue;
+    // Industry select
+    if (info.industry) {
+      const sel = document.getElementById('industry');
+      for (let opt of sel.options) { if (opt.value === info.industry || opt.text === info.industry) { sel.value = opt.value; break; } }
+    }
+    // Budget select
+    if (info.budget) {
+      const sel = document.getElementById('budget');
+      for (let opt of sel.options) { if (opt.value === info.budget || opt.text === info.budget) { sel.value = opt.value; break; } }
+    }
+    // Timeline select
+    if (info.timeline) {
+      const sel = document.getElementById('timeline');
+      for (let opt of sel.options) { if (opt.value === info.timeline || opt.text === info.timeline) { sel.value = opt.value; break; } }
+    }
+  } catch(e) {
+    // Fallback: put raw text in issue field
+    document.getElementById('issue').value = text.slice(0, 500);
+  }
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
